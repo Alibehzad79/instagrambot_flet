@@ -128,25 +128,28 @@ def main(page: ft.Page):
                 )
                 if 100 < int(profile_2.get_followers().count) < 10000:
                     users = open('users.users.txt').read().split('\n')
-                    for user in users:
-                        if user not in profile_2.username:
-                            add_user = open('users.txt', 'a+')
-                            add_user.write(profile_2.username+'\n')
-                            add_user.close()
-                            user_list.append(profile_2.username)
-                            lv.controls.append(ft.Text(f"{profile_2.username} add to list."))
-                            page.update()
-                            time_sleep = random.randint(10, 15)
-                            lv.controls.append(ft.Text((f"sleep for {time_sleep} second.")))
-                            page.update()
-                            time.sleep(time_sleep)
-                            if len(user_list) == 4:
-                                break
+                    if profile_2.username not in users:
+                        add_user = open('users.txt', 'a+')
+                        add_user.write(profile_2.username+'\n')
+                        add_user.close()
+                        user_list.append(profile_2.username)
+                        lv.controls.append(ft.Text(f"{profile_2.username} add to list."))
+                        page.update()
+                        time_sleep = random.randint(10, 15)
+                        lv.controls.append(ft.Text((f"sleep for {time_sleep} second.")))
+                        page.update()
+                        time.sleep(time_sleep)
+                        if len(user_list) == 4:
+                            break
+                    else:
+                        continue
                 else:
                     continue
             except Exception as err:
                 lv.controls.append(ft.Text(f"Error: {err}"))
+                page.update()
         lv.controls.append(ft.Text(("Extracting Done!")))
+        page.update()
         return user_list
     
     def check_account( username, password, loader):
