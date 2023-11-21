@@ -127,6 +127,8 @@ fabric.properties
 pyvenv.cfg
 .venv
 pip-selfcheck.json
+idea
+__pycache__
 
 ### VisualStudioCode ###
 .vscode/*
