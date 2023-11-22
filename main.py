@@ -51,7 +51,8 @@ def main(page: ft.Page):
         driver.close()
         page.remove(pb)
         retry_btn.disabled = False
-        page.add(ft.ElevatedButton(text="Finished!", color="blue", on_click=None))
+        resulte.bgcolor = "green"
+        resulte.text = "Finished!"
         page.update()
 
     def direct(user_list, message, driver):
@@ -83,11 +84,9 @@ def main(page: ft.Page):
                 pass
             time.sleep(3)
             try:
-                user_username = driver.find_element(By.XPATH, xpath.user_username_xpath)
-                if user_username.text == user:
-                    find_user = driver.find_element(
-                        By.XPATH, xpath.select_user_xpath
-                    ).click()
+                check_user = driver.find_element(By.XPATH, xpath.user_username_xpath)
+                if check_user.text == user:
+                    check_user.click()
                 else:
                     driver.find_element(By.XPATH, xpath.select_user_xpath).click()
             except Exception as err:
@@ -161,7 +160,7 @@ def main(page: ft.Page):
                     )
                     if 100 < int(profile_2.get_followers().count) < 10000:
                         users = open("users.txt").read().split("\n")
-                        if not profile_2.username in users:
+                        if not f'{profile_2.username}' in users:
                             add_user = open("users.txt", "a+")
                             add_user.write(profile_2.username + "\n")
                             add_user.close()
