@@ -20,8 +20,7 @@ def main(page: ft.Page):
     page.auto_scroll = True
     pb = ft.ProgressBar(width=400)
     pr = ft.ProgressRing(color='green')
-    
-    # message = "سلام وقت بخیر برای افزایش فالور و لایک و ... به پیچ زیر پیام بفرستید @flowere_buy"
+
     instagram_url = "https://instagram.com/"
 
     def login(username, password, driver):
