@@ -13,12 +13,18 @@ def main(page: ft.Page):
     page.title = "Instagram Bot"
     page.vertical_alignment = ft.MainAxisAlignment.CENTER
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
-    resulte = ft.ElevatedButton(text="Welcome!", on_click=None, bgcolor="green", color='white', style=ft.ButtonStyle(padding=10))
+    resulte = ft.ElevatedButton(
+        text="Welcome!",
+        on_click=None,
+        bgcolor="green",
+        color="white",
+        style=ft.ButtonStyle(padding=10),
+    )
     page.window_width = 800
     page.window_height = 800
     page.auto_scroll = True
     pb = ft.ProgressBar(width=400)
-    pr = ft.ProgressRing(color='green')
+    pr = ft.ProgressRing(color="green")
 
     instagram_url = "https://instagram.com/"
 
@@ -38,11 +44,15 @@ def main(page: ft.Page):
 
     def logout(driver):
         driver.get(instagram_url + "accounts/logout/")
-        resulte.bgcolor = 'orange'
+        resulte.bgcolor = "orange"
         resulte.text = "Logout Successfully!"
         page.update()
         time.sleep(2)
         driver.close()
+        page.remove(pb)
+        retry_btn.disabled = False
+        page.add(ft.ElevatedButton(text="Finished!", color="blue", on_click=None))
+        page.update()
 
     def direct(user_list, message, driver):
         driver.get(instagram_url + "direct/inbox/")
@@ -60,37 +70,37 @@ def main(page: ft.Page):
             try:
                 driver.find_element(By.XPATH, xpath.send_message_xpath).click()
             except Exception as err:
-                lv.controls.append(ft.Text(err))
                 pass
             time.sleep(5)
             try:
                 driver.find_element(By.XPATH, xpath.search_box_xpath).click()
             except Exception as err:
-                lv.controls.append(ft.Text(err))
                 pass
             time.sleep(1)
             try:
                 driver.find_element(By.XPATH, xpath.search_input_xpath).send_keys(user)
             except Exception as err:
-                lv.controls.append(ft.Text(err))
                 pass
             time.sleep(3)
             try:
-                driver.find_element(By.XPATH, xpath.select_user_xpath).click()
+                user_username = driver.find_element(By.XPATH, xpath.user_username_xpath)
+                if user_username.text == user:
+                    find_user = driver.find_element(
+                        By.XPATH, xpath.select_user_xpath
+                    ).click()
+                else:
+                    driver.find_element(By.XPATH, xpath.select_user_xpath).click()
             except Exception as err:
-                lv.controls.append(ft.Text(err))
                 pass
             time.sleep(2)
             try:
                 driver.find_element(By.XPATH, xpath.chat_btn_xpath).click()
             except Exception as err:
-                lv.controls.append(ft.Text(err))
                 pass
             time.sleep(5)
             try:
                 driver.find_element(By.XPATH, xpath.message_box_xpath).click()
             except Exception as err:
-                lv.controls.append(ft.Text(err))
                 pass
             time.sleep(5)
             try:
@@ -103,8 +113,26 @@ def main(page: ft.Page):
                 message_box.send_keys(Keys.CONTROL + "v")
                 time.sleep(5)
                 message_box.send_keys(Keys.ENTER)
+                time.sleep(5)
+                lv.controls.append(
+                    ft.ElevatedButton(
+                        text=f"Send successfully to {user}.",
+                        bgcolor="green",
+                        color="white",
+                        on_click=None,
+                    )
+                )
+                page.update()
             except Exception as err:
-                lv.controls.append(ft.Text(err))
+                lv.controls.append(
+                    ft.ElevatedButton(
+                        text=f"send unsuccessfully to {user}.",
+                        bgcolor="red",
+                        color="white",
+                        on_click=None,
+                    )
+                )
+                page.update()
                 pass
             time.sleep(10)
             page.update()
@@ -113,10 +141,8 @@ def main(page: ft.Page):
             except Exception as err:
                 lv.controls.append(ft.Text(err))
                 pass
-        resulte.text = "Finished."
+        page.update()
         logout(driver=driver)
-        driver.close()
-        page.remove(pb)
 
     def find_users(target_user, loader, driver):
         resulte.text = f"Extracting Users from {target_user} "
@@ -134,18 +160,26 @@ def main(page: ft.Page):
                         loader.context, user.username
                     )
                     if 100 < int(profile_2.get_followers().count) < 10000:
-                        users = open("users.users.txt").read().split("\n")
-                        if profile_2.username not in users:
+                        users = open("users.txt").read().split("\n")
+                        if not profile_2.username in users:
                             add_user = open("users.txt", "a+")
                             add_user.write(profile_2.username + "\n")
                             add_user.close()
                             user_list.append(profile_2.username)
                             lv.controls.append(
-                                ft.Text(f"{profile_2.username} add to list.")
+                                ft.ElevatedButton(
+                                    text=f"{profile_2.username} added to list.",
+                                    color="white",
+                                    bgcolor="blue",
+                                    on_click=None,
+                                    icon=ft.icons.PERSON,
+                                )
                             )
                             page.update()
                             time_sleep = random.randint(10, 15)
-                            lv.controls.append(ft.Text((f"sleep for {time_sleep} second.")))
+                            lv.controls.append(
+                                ft.Text((f"sleep for {time_sleep} second."))
+                            )
                             page.update()
                             time.sleep(time_sleep)
                             if len(user_list) == 4:
@@ -159,14 +193,14 @@ def main(page: ft.Page):
                     lv.controls.append(ft.Text(f"Error: {err}"))
                     page.remove(pb)
                     page.update()
-            lv.controls.append(ft.Text(("Extracting Done!")))
+            resulte.text = "Extracting Done!"
             page.update()
             return user_list
         except Exception as err:
             lv.controls.append(ft.Text(f"Error: {err}"))
             page.remove(pb)
-            retry_btn.disabled=False
-            resulte.bgcolor = 'red'
+            retry_btn.disabled = False
+            resulte.bgcolor = "red"
             resulte.text = "Failed to Extracting."
             page.update()
             logout(driver=driver)
@@ -181,20 +215,22 @@ def main(page: ft.Page):
             return True
         except Exception as error:
             lv.controls.append(ft.Text(error))
-            resulte.bgcolor = 'red'
+            resulte.bgcolor = "red"
             resulte.text = "account unsuccessfully checked"
             return False
 
     def start(target_user, username, password, message):
-        retry_btn.disabled=True
+        retry_btn.disabled = True
         lv.clean()
-        resulte.bgcolor = 'green'
+        resulte.bgcolor = "green"
         resulte.text = "Starting Bot..."
         page.update()
         page.banner = ft.Banner(
             bgcolor=ft.colors.RED_500,
             leading=ft.Icon(ft.icons.WARNING_ROUNDED, color=ft.colors.WHITE, size=40),
-            content=ft.Text("Do not copy any text in clipboard"),
+            content=ft.Text(
+                "Do not copy any text in clipboard and don't close Firefox browser"
+            ),
             actions=[ft.TextButton("Warning", on_click=None)],
         )
         page.banner.open = True
@@ -218,12 +254,12 @@ def main(page: ft.Page):
             direct(user_list=user_list, message=message, driver=driver)
             logout(driver=driver)
         else:
-            resulte.bgcolor = 'red'
+            resulte.bgcolor = "red"
             resulte.text = "Login Field!"
             driver.close()
             page.remove(pb)
             page.update()
-            retry_btn.disabled=False
+            retry_btn.disabled = False
             page.update()
 
     target_username = ft.TextField(label="target username (like: cristiano)")

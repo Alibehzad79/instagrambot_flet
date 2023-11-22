@@ -129,6 +129,7 @@ pyvenv.cfg
 pip-selfcheck.json
 .idea
 __pycache__
+users.txt
 
 ### VisualStudioCode ###
 .vscode/*
