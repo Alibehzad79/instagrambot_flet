@@ -130,6 +130,7 @@ pip-selfcheck.json
 .idea
 __pycache__
 users.txt
+users
 
 ### VisualStudioCode ###
 .vscode/*
