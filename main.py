@@ -227,7 +227,7 @@ def main(page: ft.Page):
             retry_btn.disabled=False
             page.update()
 
-    target_username = ft.TextField(label="target username (like: alidaei)")
+    target_username = ft.TextField(label="target username (like: cristiano)")
     username = ft.TextField(label="username")
     password = ft.TextField(label="password", password=True, can_reveal_password=True)
     message = ft.TextField(
