@@ -131,6 +131,10 @@ pip-selfcheck.json
 __pycache__
 users.txt
 users
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6a530b8464e232d3031c1a9158d12b4e8a49a59f
 ### VisualStudioCode ###
 .vscode/*
 !.vscode/settings.json
