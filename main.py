@@ -6,7 +6,6 @@ import xpaths as xpath
 import time
 import random
 import flet as ft
-import asyncio
 import os
 
 
