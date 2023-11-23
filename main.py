@@ -22,9 +22,19 @@ def main(page: ft.Page):
     )
     page.window_width = 800
     page.window_height = 800
+    page.window_center()
     page.auto_scroll = True
     pb = ft.ProgressBar(width=400)
     pr = ft.ProgressRing(color="green")
+    load = ft.Column(
+        [ft.Container(ft.ProgressRing()), ft.Text("Opening Browser")],
+        horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+    )
+    page.add(load)
+    browser_profile = webdriver.FirefoxOptions()
+    browser_profile.set_preference("dom.webnotifications.enabled", False)
+    driver = webdriver.Firefox(options=browser_profile)
+    page.remove(load)
 
     instagram_url = "https://instagram.com/"
 
@@ -48,8 +58,8 @@ def main(page: ft.Page):
         resulte.text = "Logout Successfully!"
         page.update()
         time.sleep(2)
-        driver.close()
         page.remove(pb)
+        page.update()
         retry_btn.disabled = False
         resulte.bgcolor = "green"
         resulte.text = "Finished!"
@@ -160,7 +170,7 @@ def main(page: ft.Page):
                     )
                     if 100 < int(profile_2.get_followers().count) < 10000:
                         users = open("users.txt").read().split("\n")
-                        if not f'{profile_2.username}' in users:
+                        if not f"{profile_2.username}" in users:
                             add_user = open("users.txt", "a+")
                             add_user.write(profile_2.username + "\n")
                             add_user.close()
@@ -218,7 +228,7 @@ def main(page: ft.Page):
             resulte.text = "account unsuccessfully checked"
             return False
 
-    def start(target_user, username, password, message):
+    def start(target_user, username, password, message, driver):
         retry_btn.disabled = True
         lv.clean()
         resulte.bgcolor = "green"
@@ -236,9 +246,6 @@ def main(page: ft.Page):
         page.update()
         pb.width = 400
         page.add(pb)
-        browser_profile = webdriver.FirefoxOptions()
-        browser_profile.set_preference("dom.webnotifications.enabled", False)
-        driver = webdriver.Firefox(options=browser_profile)
         loader = instaloader.Instaloader()
         checkaccount = check_account(
             username=username, password=password, loader=loader
@@ -255,7 +262,6 @@ def main(page: ft.Page):
         else:
             resulte.bgcolor = "red"
             resulte.text = "Login Field!"
-            driver.close()
             page.remove(pb)
             page.update()
             retry_btn.disabled = False
@@ -275,6 +281,7 @@ def main(page: ft.Page):
             username=username.value,
             password=password.value,
             message=message.value,
+            driver=driver,
         ),
     )
 
@@ -304,18 +311,22 @@ def main(page: ft.Page):
     retry_btn = ft.ElevatedButton(
         text="Retry",
         disabled=True,
-        on_click=lambda e: (
-            start(
-                target_user=target_username,
-                username=username,
-                password=password,
-                message=message,
-            ),
+        on_click=lambda e: start(
+            target_user=target_username,
+            username=username,
+            password=password,
+            message=message,
         ),
         color="green",
     )
     lv = ft.ListView(expand=2, spacing=10, padding=20, auto_scroll=True)
-    page.add(t, resulte, lv, retry_btn)
+
+    def exit_def(e):
+        driver.close()
+        page.window_close()
+
+    exit_btn = ft.ElevatedButton(text="Exit", color="red", on_click=exit_def)
+    page.add(t, resulte, lv, retry_btn, exit_btn)
 
 
 ft.app(target=main)
