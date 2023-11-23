@@ -322,8 +322,11 @@ def main(page: ft.Page):
     lv = ft.ListView(expand=2, spacing=10, padding=20, auto_scroll=True)
 
     def exit_def(e):
-        driver.close()
-        page.window_close()
+        try:
+            page.window_close()
+            driver.close()
+        except:
+            pass
 
     exit_btn = ft.ElevatedButton(text="Exit", color="red", on_click=exit_def)
     page.add(t, resulte, lv, retry_btn, exit_btn)
