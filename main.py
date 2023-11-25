@@ -57,7 +57,6 @@ def main(page: ft.Page):
         resulte.bgcolor = "orange"
         resulte.text = "Logout Successfully!"
         page.update()
-        time.sleep(2)
         page.remove(pb)
         page.update()
         retry_btn.disabled = False
@@ -327,6 +326,7 @@ def main(page: ft.Page):
             page.window_close()
             driver.close()
         except:
+            page.window_close()
             pass
 
     exit_btn = ft.ElevatedButton(text="Exit", color="red", on_click=exit_def)
