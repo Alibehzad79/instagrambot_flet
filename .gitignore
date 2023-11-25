@@ -131,6 +131,7 @@ pip-selfcheck.json
 __pycache__
 users.txt
 users
+dist
 <<<<<<< HEAD
 =======
 
