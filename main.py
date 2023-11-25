@@ -297,13 +297,6 @@ def main(page: ft.Page):
                     )
                 ),
             ),
-            ft.Tab(
-                text="Comment App",
-                icon=ft.icons.SETTINGS,
-                content=ft.Container(
-                    content=ft.Text("This Comment App"), alignment=ft.alignment.center
-                ),
-            ),
         ],
         expand=4,
     )
