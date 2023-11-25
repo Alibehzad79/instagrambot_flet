@@ -168,7 +168,10 @@ def main(page: ft.Page):
                         loader.context, user.username
                     )
                     if 100 < int(profile_2.get_followers().count) < 10000:
-                        users = open("users.txt").read().split("\n")
+                        try:
+                            users = open("users.txt").read().split("\n")
+                        except:
+                            users = open("users.txt", "a").read().split("\n")
                         if not f"{profile_2.username}" in users:
                             add_user = open("users.txt", "a+")
                             add_user.write(profile_2.username + "\n")
@@ -317,9 +320,12 @@ def main(page: ft.Page):
     def exit_def(e):
         try:
             page.window_close()
+            logout(driver=driver)
+            time.sleep(1)
             driver.close()
         except:
             page.window_close()
+            driver.close()
             pass
 
     exit_btn = ft.ElevatedButton(text="Exit", color="red", on_click=exit_def)
