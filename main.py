@@ -274,7 +274,7 @@ def main(page: ft.Page):
     password = ft.TextField(label="password", password=True, can_reveal_password=True)
     message = ft.TextField(
         label="Message",
-        value="سلام وقت بخیر برای افزایش فالور و لایک و ... به پیچ زیر پیام بفرستید @flowere_buy",
+        # value="سلام وقت بخیر برای افزایش فالور و لایک و ... به پیچ زیر پیام بفرستید @flowere_buy",
     )
     submit_btn = ft.ElevatedButton(
         text="Submit",
