@@ -274,7 +274,7 @@ def main(page: ft.Page):
     password = ft.TextField(label="password", password=True, can_reveal_password=True)
     message = ft.TextField(
         label="Message",
-        # value="سلام وقت بخیر برای افزایش فالور و لایک و ... به پیچ زیر پیام بفرستید @flowere_buy",
+        value="سلام وقت بخیر برای افزایش فالور و لایک و ... به پیچ زیر پیام بفرستید @flowere_buy",
     )
     submit_btn = ft.ElevatedButton(
         text="Submit",
@@ -319,13 +319,13 @@ def main(page: ft.Page):
 
     def exit_def(e):
         try:
-            page.window_close()
             logout(driver=driver)
+            driver.quit()
             time.sleep(1)
-            driver.close()
-        except:
             page.window_close()
-            driver.close()
+        except:
+            driver.quit()
+            page.window_close()
             pass
 
     exit_btn = ft.ElevatedButton(text="Exit", color="red", on_click=exit_def)
