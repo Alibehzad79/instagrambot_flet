@@ -46,9 +46,9 @@ def main(page: ft.Page):
         time.sleep(10)
         driver.find_element(By.XPATH, xpath.username_xpath).send_keys(username)
         time.sleep(3)
-        driver.find_element(By.XPATH, xpath.password_xpath).send_keys(password)
-        time.sleep(3)
-        driver.find_element(By.XPATH, xpath.submit_btn).click()
+        driver.find_element(By.XPATH, xpath.password_xpath).send_keys(password+Keys.ENTER)
+        # time.sleep(3)
+        # driver.find_element(By.XPATH, xpath.submit_btn).click()
         time.sleep(10)
         page.remove(pr)
 
@@ -93,7 +93,7 @@ def main(page: ft.Page):
                 pass
             time.sleep(3)
             try:
-                check_user = driver.find_element(By.XPATH, xpath.user_username_xpath)
+                check_user = driver.find_element(By.XPATH, f"//*[contains(text(),'{user}')]")
                 if check_user.text == user:
                     check_user.click()
                 else:
@@ -274,6 +274,7 @@ def main(page: ft.Page):
     password = ft.TextField(label="password", password=True, can_reveal_password=True)
     message = ft.TextField(
         label="Message",
+        value="سلام وقت بخیر برای افزایش فالور و لایک و ... به پیچ زیر پیام بفرستید @flowere_buy"
     )
     submit_btn = ft.ElevatedButton(
         text="Submit",
@@ -320,7 +321,6 @@ def main(page: ft.Page):
         try:
             logout(driver=driver)
             driver.quit()
-            time.sleep(1)
             page.window_close()
         except:
             driver.quit()
